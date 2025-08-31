@@ -1,0 +1,65 @@
+alias cat='bat --plain --paging=never'
+alias bathelp='bat --plain --language=help'
+function help {
+    "$@" --help 2>&1 | bathelp
+}
+
+alias ls=eza
+alias ll="eza --icons --oneline"
+
+alias v=nvim
+alias vi=nvim
+alias vim=nvim
+alias fv="fzf --multi --bind 'enter:become(nvim {+})'"
+
+alias vneovim="nvim $HOME/.config/nvim --cmd 'cd $HOME/.config/nvim/'"
+alias valiases="nvim $HOME/.aliases --cmd 'cd $HOME/'"
+alias venv="nvim $HOME/.env --cmd 'cd $HOME/'"
+alias vprofile="nvim $HOME/.profile --cmd 'cd $HOME/'"
+alias vzsh="nvim $HOME/.zshrc --cmd 'cd $HOME/'"
+alias vbash="nvim $HOME/.bashrc --cmd 'cd $HOME/'"
+alias vscripts="nvim $HOME/.config/scripts --cmd 'cd $HOME/.config/scripts/'"
+alias vreadme="nvim $HOME/README.md --cmd 'cd $HOME/'"
+alias vgit="nvim $HOME/.gitconfig --cmd 'cd $HOME/'"
+alias vnix="nvim $HOME/.config/nixos-config/ --cmd 'cd $HOME/.config/nixos-config/'"
+
+alias vpijul="nvim $HOME/.config/pijul/config.toml"
+alias pj=pijul
+
+alias vnotes="nvim $HOME/Documents/obsidian-notes --cmd 'cd $HOME/Documents/obsidian-notes'"
+alias notes="cd ~/Documents/obsidian-notes"
+
+alias vbspwm="nvim $HOME/.config/bspwm 'cd $HOME/.config/bspwm/'"
+
+alias vhypr="nvim $HOME/.config/hypr --cmd 'cd $HOME/.config/hypr/'"
+
+alias jpp=fuck
+
+function yy() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXX")"
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
+
+function dots {
+	/usr/bin/git --git-dir=$HOME/.dotfiles/.git --work-tree=$HOME "$@"
+}
+
+function lazydots {
+	/usr/bin/lazygit --git-dir=$HOME/.dotfiles/.git --work-tree=$HOME "$@"
+}
+
+alias sensei='sudo docker container run \
+  --pull always \
+  --interactive \
+  --tty \
+  --rm \
+  --volume $(pwd):/$(basename $(pwd)) \
+  --workdir /$(basename $(pwd)) \
+  --publish ${SENSEI_PORT:-8080}:${SENSEI_PORT:-8080} \
+  --env SENSEI_PORT \
+  --cap-add=SYS_ADMIN \
+  zenika/sensei'

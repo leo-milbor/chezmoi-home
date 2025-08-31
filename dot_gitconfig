@@ -1,0 +1,38 @@
+[init]
+	defaultBranch = main
+[user]
+	email = 20482270+leo-milbor@users.noreply.github.com
+	name = Léo Milbor
+[alias]
+	lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+	st = status
+	ci = commit
+	ciam = commit -am
+	ciamend = commit --amend
+	ciaamend = commit -a --amend
+	cim = commit -m
+	co = checkout
+	sw = switch
+	br = branch
+	pulp = pull -p
+	fere = fetch && git rebase
+	please = push --force-with-lease
+	diff = diff | xargs bat --diff
+[push]
+  default = current
+  autoSetupRemote = true
+[pull]
+	ff = only
+	rebase = true
+[fetch]
+	prune = true
+	pruneTags = true
+[maintenance]
+	repo = /home/leo
+	repo = /home/leo/Sources/Perso/escapi
+[diff]
+	colormovedws = allow-indentation-change
+	colorMoved = true
+  tool = nvimdiff
+[merge]
+  tool = nvimdiff

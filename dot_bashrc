@@ -1,0 +1,20 @@
+# .bashrc
+# Do not modify those. Just override hte config here.
+source ~/.local/share/omarchy/default/bash/rc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+  . /etc/bashrc
+fi
+
+# Common shell conf
+. $HOME/.profile
+
+# Prompt
+eval "$(starship init bash)"
+
+# zoxide
+eval "$(zoxide init bash)"
+
+# Set up fzf key bindings and fuzzy completion
+eval "$(fzf --bash)"

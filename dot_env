@@ -1,0 +1,47 @@
+export EDITOR='nvim'
+
+# PATH
+export PATH=$PATH:"$HOME/bin"
+export PATH=$PATH:"$HOME/.config/scripts"
+export PATH=$PATH:"$HOME/.local/bin"
+export PATH=$PATH:"$HOME/.config/bspwm"
+
+# added by Toolbox App
+export PATH="$PATH:$HOME/.local/share/JetBrains/Toolbox/scripts"
+
+# go env
+export PATH=$PATH:"/usr/local/go/bin"
+export PATH=$PATH:"$HOME/go/bin"
+
+# rust env
+source_if_exists "$HOME/.cargo/env"
+
+# dotnet env
+export PATH="$PATH:$HOME/.dotnet/"
+export DOTNET_ROOT="$HOME/.dotnet/"
+
+# flutter
+export PATH="$PATH:$HOME/flutter/bin"
+
+# java
+export PATH="$PATH:$HOME/java/jdk-21.0.6+7/bin"
+
+# node version manager
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
+
+# fzf
+## use ripgrep instead of find
+export FZF_DEFAULT_COMMAND='rg --files --hidden'
+## add preview for files
+export FZF_DEFAULT_OPTS="--height 50% -1 --layout=reverse-list --multi --preview='[[ \$(file --mime {}) =~ binary ]] && echo {} is a binary file || (bat --style=numbers --color=always {} || cat {}) 2> /dev/null | head -300'"
+## catppuccin-macchiato color scheme
+export FZF_DEFAULT_OPTS=" \
+--color=bg+:#363a4f,bg:#24273a,spinner:#f4dbd6,hl:#ed8796 \
+--color=fg:#cad3f5,header:#ed8796,info:#c6a0f6,pointer:#f4dbd6 \
+--color=marker:#f4dbd6,fg+:#cad3f5,prompt:#c6a0f6,hl+:#ed8796"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"

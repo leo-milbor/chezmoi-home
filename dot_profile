@@ -1,0 +1,7 @@
+function source_if_exists {
+    file_to_source="$1"
+    [ -f "$1" ] && source "$1"
+}
+
+source_if_exists "$HOME/.env"
+source_if_exists "$HOME/.aliases"
