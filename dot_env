@@ -6,6 +6,9 @@ export PATH=$PATH:"$HOME/.config/scripts"
 export PATH=$PATH:"$HOME/.local/bin"
 export PATH=$PATH:"$HOME/.config/bspwm"
 
+# secrets
+[ -s "$HOME/.secrets" ] && \. "$HOME/.secrets"
+
 # added by Toolbox App
 export PATH="$PATH:$HOME/.local/share/JetBrains/Toolbox/scripts"
 
@@ -22,6 +25,9 @@ export DOTNET_ROOT="$HOME/.dotnet/"
 
 # flutter
 export PATH="$PATH:$HOME/flutter/bin"
+
+# android env
+export ANDROID_HOME="$HOME/Android/Sdk/"
 
 # java
 export PATH="$PATH:$HOME/java/jdk-21.0.6+7/bin"
