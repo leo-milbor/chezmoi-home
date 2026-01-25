@@ -36,3 +36,5 @@
   tool = nvimdiff
 [merge]
   tool = nvimdiff
+[core]
+	autocrlf = input

@@ -17,7 +17,7 @@ export PATH=$PATH:"/usr/local/go/bin"
 export PATH=$PATH:"$HOME/go/bin"
 
 # rust env
-source_if_exists "$HOME/.cargo/env"
+[ -s "$HOME/.cargo/env" ] && \. "$HOME/.cargo/env"
 
 # dotnet env
 export PATH="$PATH:$HOME/.dotnet/"
@@ -28,6 +28,10 @@ export PATH="$PATH:$HOME/flutter/bin"
 
 # android env
 export ANDROID_HOME="$HOME/Android/Sdk/"
+export PATH=$PATH:"$ANDROID_HOME/cmdline-tools/latest/bin"
+export PATH=$PATH:"$ANDROID_HOME/platform-tools/"
+export PATH=$PATH:"$ANDROID_HOME/emulator/"
+export ANDROID_EMULATOR_HOME="$HOME/.config/.android/"
 
 # java
 export PATH="$PATH:$HOME/java/jdk-21.0.6+7/bin"
