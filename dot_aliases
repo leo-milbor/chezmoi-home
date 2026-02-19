@@ -12,28 +12,34 @@ alias vi=nvim
 alias vim=nvim
 alias fv="fzf --multi --bind 'enter:become(nvim {+})'"
 
-alias vneovim="nvim $HOME/.config/nvim --cmd 'cd $HOME/.config/nvim/'"
 alias valiases="nvim $HOME/.aliases --cmd 'cd $HOME/'"
-alias venv="nvim $HOME/.env --cmd 'cd $HOME/'"
-alias vprofile="nvim $HOME/.profile --cmd 'cd $HOME/'"
-alias vzsh="nvim $HOME/.zshrc --cmd 'cd $HOME/'"
 alias vbash="nvim $HOME/.bashrc --cmd 'cd $HOME/'"
-alias vscripts="nvim $HOME/.config/scripts --cmd 'cd $HOME/.config/scripts/'"
-alias vreadme="nvim $HOME/README.md --cmd 'cd $HOME/'"
+alias vbspwm="nvim $HOME/.config/bspwm 'cd $HOME/.config/bspwm/'"
+alias venv="nvim $HOME/.env --cmd 'cd $HOME/'"
 alias vgit="nvim $HOME/.gitconfig --cmd 'cd $HOME/'"
+alias vhypr="nvim $HOME/.config/hypr --cmd 'cd $HOME/.config/hypr/'"
+alias vneovim="nvim $HOME/.config/nvim --cmd 'cd $HOME/.config/nvim/'"
+alias vnotes="nvim $HOME/Documents/obsidian-notes --cmd 'cd $HOME/Documents/obsidian-notes'"
 alias vnix="nvim $HOME/.config/nixos-config/ --cmd 'cd $HOME/.config/nixos-config/'"
-
+alias vprofile="nvim $HOME/.profile --cmd 'cd $HOME/'"
+alias vreadme="nvim $HOME/README.md --cmd 'cd $HOME/'"
+alias vscripts="nvim $HOME/.config/scripts --cmd 'cd $HOME/.config/scripts/'"
+alias vsecrets="nvim $HOME/.secrets --cmd 'cd $HOME'"
+alias vzsh="nvim $HOME/.zshrc --cmd 'cd $HOME/'"
 alias vpijul="nvim $HOME/.config/pijul/config.toml"
+
+alias saliases="source $HOME/.aliases"
+alias sbashrc="source $HOME/bashrc"
+alias senv="source $HOME/.env"
+alias sprofile="source $HOME/.profile"
+alias ssecrets="source $HOME/.secrets"
+alias szshrc="source $HOME/.zshrc"
+
 alias pj=pijul
 
-alias vnotes="nvim $HOME/Documents/obsidian-notes --cmd 'cd $HOME/Documents/obsidian-notes'"
-alias notes="cd ~/Documents/obsidian-notes"
-
-alias vbspwm="nvim $HOME/.config/bspwm 'cd $HOME/.config/bspwm/'"
-
-alias vhypr="nvim $HOME/.config/hypr --cmd 'cd $HOME/.config/hypr/'"
-
 alias jpp=fuck
+
+alias cm=chezmoi
 
 function yy() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXX")"
@@ -52,7 +58,7 @@ function lazydots {
 	/usr/bin/lazygit --git-dir=$HOME/.dotfiles/.git --work-tree=$HOME "$@"
 }
 
-alias sensei='sudo docker container run \
+alias sensei='docker container run \
   --pull always \
   --interactive \
   --tty \
