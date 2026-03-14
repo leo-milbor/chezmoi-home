@@ -49,14 +49,10 @@ function yy() {
   fi
   rm -f -- "$tmp"
 }
-#
+
 # Start a new configuration session in tmux or attach to it if it exists
-conf-session() {
-  # Check if tmux is installed
-  if ! command -v tmux &>/dev/null; then
-    echo "Error: tmux is not installed."
-    return 1
-  fi
+function tconf-session {
+  __ensure-installed "tmux"
 
   local detached=false
   local session_name="config"
@@ -74,44 +70,29 @@ conf-session() {
     esac
   done
 
-  if tmux has-session -t "$session_name" 2>/dev/null; then
-    echo "Session '$session_name' already exists. Attaching..."
-    tmux attach-session -t "$session_name"
-    return 0
-  fi
+  __tmux-try-switch $session_name
 
-  if [ "$detached" = true ]; then
-    tmux new-session -d -s "$session_name" -n "term"
-    echo "Session '$session_name' created (detached)."
-    echo "Attach with: tmux attach -t $session_name"
-  else
-    tmux new-session -s "$session_name" -n "term"
-    echo "Session '$session_name' created. You are now attached."
-  fi
+  tmux new-session -d -s "$session_name" -n "neovim"
 
-  tmux new-window -t "$session_name" -n "neovim"
   tmux send-keys -t "$session_name:neovim" "cd $HOME/.config/nvim && nvim ." C-m
 
   tmux new-window -t "$session_name" -n "crush"
   tmux send-keys -t "$session_name:crush" "cd $HOME/.config/crush && nvim ." C-m
 
   tmux new-window -t "$session_name" -n "cerebrum"
-  tmux send-keys -t "$session_name:cerebrum" "cd $HOME/sources/ai-stuff/cerebrum-machinae/ && nvim ." C-m
+  tmux send-keys -t "$session_name:cerebrum" "cd $HOME/sources/ai-stuff/cerebrum-machinae && nvim ." C-m
 
-  # Switch back to the first window ('term') so it's active when you attach
-  tmux select-window -t "$session_name:term"
+  if [ "$detached" = false ]; then
+    tmux select-window -t "$session_name:term"
+  fi
 
-  echo "Session '$session_name' created with windows: term, neovim, ai."
-  echo "Attach with: tmux attach -t $session_name"
+  echo "Windows created: neovim, crush, cerebrum"
+  __tmux-switch $session_name $detached
 }
 
 # Start a new dev session in tmux or attach to it if it exists
-dev-session() {
-  # Check if tmux is installed
-  if ! command -v tmux &>/dev/null; then
-    echo "Error: tmux is not installed."
-    return 1
-  fi
+function tdev-session {
+  __ensure-installed "tmux"
 
   local detached=false
   local session_name="dev"
@@ -129,23 +110,9 @@ dev-session() {
     esac
   done
 
-  # Check if session already exists to avoid errors
-  if tmux has-session -t "$session_name" 2>/dev/null; then
-    echo "Session '$session_name' already exists. Attaching..."
-    tmux attach-session -t "$session_name"
-    return 0
-  fi
+  __tmux-try-switch "$session_name"
 
-  if [ "$detached" = true ]; then
-    tmux new-session -d -s "$session_name" -n "term"
-    echo "Session '$session_name' created (detached)."
-    echo "Attach with: tmux attach -t $session_name"
-  else
-    tmux new-session -s "$session_name" -n "term"
-    echo "Session '$session_name' created. You are now attached."
-  fi
-
-  tmux new-session -s "$session_name" -n "term"
+  tmux new-session -d -s "$session_name" -n "term"
 
   tmux new-window -t "$session_name" -n "neovim"
   tmux send-keys -t "$session_name:neovim" "nvim ." C-m
@@ -153,10 +120,50 @@ dev-session() {
   tmux new-window -t "$session_name" -n "ai"
   tmux send-keys -t "$session_name:ai" "crush" C-m
 
-  tmux select-window -t "$session_name:neovim"
+  if [ "$detached" = false ]; then
+    tmux select-window -t "$session_name:term"
+  fi
 
-  echo "Session '$session_name' created with windows: term, neovim, ai."
-  echo "Attach with: tmux attach -t $session_name"
+  echo "Windows created: term, neovim, ai"
+  __tmux-switch "$session_name" "$detached"
+}
+
+function __tmux-try-switch {
+  session_name=$1
+  if tmux has-session -t "$session_name" 2>/dev/null; then
+    echo "Session '$session_name' already exists."
+    if [ -n "$TMUX" ]; then
+      echo "Switching to it..."
+      tmux switch-client -t "$session_name"
+    else
+      echo "Attaching..."
+      tmux attach-session -t "$session_name"
+    fi
+    exit 0
+  fi
+}
+
+function __tmux-switch {
+  session_name=$1
+  detached=$2
+  if [ "$detached" = true ]; then
+    echo "Running in detached mode."
+    echo "Attach with: tmux attach -t $session_name"
+  elif [ -n "$TMUX" ]; then
+    echo "Switching to new session..."
+    tmux switch-client -t "$session_name"
+  else
+    echo "Attaching to new session..."
+    tmux attach-session -t "$session_name"
+  fi
+}
+
+function __ensure-installed {
+  tool=$1
+  if ! command -v "$tool" &>/dev/null; then
+    echo "Error: $tool is not installed."
+    exit 1
+  fi
 }
 
 function dots {
