@@ -1,7 +1,7 @@
 alias cat='bat --plain --paging=never'
 alias bathelp='bat --plain --language=help'
 function help {
-    "$@" --help 2>&1 | bathelp
+  "$@" --help 2>&1 | bathelp
 }
 
 alias ls=eza
@@ -42,20 +42,129 @@ alias jpp=fuck
 alias cm=chezmoi
 
 function yy() {
-	local tmp="$(mktemp -t "yazi-cwd.XXXXX")"
-	yazi "$@" --cwd-file="$tmp"
-	if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-		cd -- "$cwd"
-	fi
-	rm -f -- "$tmp"
+  local tmp="$(mktemp -t "yazi-cwd.XXXXX")"
+  yazi "$@" --cwd-file="$tmp"
+  if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+    cd -- "$cwd"
+  fi
+  rm -f -- "$tmp"
+}
+#
+# Start a new configuration session in tmux or attach to it if it exists
+conf-session() {
+  # Check if tmux is installed
+  if ! command -v tmux &>/dev/null; then
+    echo "Error: tmux is not installed."
+    return 1
+  fi
+
+  local detached=false
+  local session_name="config"
+
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+    -d | --detach)
+      detached=true
+      shift
+      ;;
+    *)
+      session_name="$1"
+      shift
+      ;;
+    esac
+  done
+
+  if tmux has-session -t "$session_name" 2>/dev/null; then
+    echo "Session '$session_name' already exists. Attaching..."
+    tmux attach-session -t "$session_name"
+    return 0
+  fi
+
+  if [ "$detached" = true ]; then
+    tmux new-session -d -s "$session_name" -n "term"
+    echo "Session '$session_name' created (detached)."
+    echo "Attach with: tmux attach -t $session_name"
+  else
+    tmux new-session -s "$session_name" -n "term"
+    echo "Session '$session_name' created. You are now attached."
+  fi
+
+  tmux new-window -t "$session_name" -n "neovim"
+  tmux send-keys -t "$session_name:neovim" "cd $HOME/.config/nvim && nvim ." C-m
+
+  tmux new-window -t "$session_name" -n "crush"
+  tmux send-keys -t "$session_name:crush" "cd $HOME/.config/crush && nvim ." C-m
+
+  tmux new-window -t "$session_name" -n "cerebrum"
+  tmux send-keys -t "$session_name:cerebrum" "cd $HOME/sources/ai-stuff/cerebrum-machinae/ && nvim ." C-m
+
+  # Switch back to the first window ('term') so it's active when you attach
+  tmux select-window -t "$session_name:term"
+
+  echo "Session '$session_name' created with windows: term, neovim, ai."
+  echo "Attach with: tmux attach -t $session_name"
+}
+
+# Start a new dev session in tmux or attach to it if it exists
+dev-session() {
+  # Check if tmux is installed
+  if ! command -v tmux &>/dev/null; then
+    echo "Error: tmux is not installed."
+    return 1
+  fi
+
+  local detached=false
+  local session_name="dev"
+
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+    -d | --detach)
+      detached=true
+      shift
+      ;;
+    *)
+      session_name="$1"
+      shift
+      ;;
+    esac
+  done
+
+  # Check if session already exists to avoid errors
+  if tmux has-session -t "$session_name" 2>/dev/null; then
+    echo "Session '$session_name' already exists. Attaching..."
+    tmux attach-session -t "$session_name"
+    return 0
+  fi
+
+  if [ "$detached" = true ]; then
+    tmux new-session -d -s "$session_name" -n "term"
+    echo "Session '$session_name' created (detached)."
+    echo "Attach with: tmux attach -t $session_name"
+  else
+    tmux new-session -s "$session_name" -n "term"
+    echo "Session '$session_name' created. You are now attached."
+  fi
+
+  tmux new-session -s "$session_name" -n "term"
+
+  tmux new-window -t "$session_name" -n "neovim"
+  tmux send-keys -t "$session_name:neovim" "nvim ." C-m
+
+  tmux new-window -t "$session_name" -n "ai"
+  tmux send-keys -t "$session_name:ai" "crush" C-m
+
+  tmux select-window -t "$session_name:neovim"
+
+  echo "Session '$session_name' created with windows: term, neovim, ai."
+  echo "Attach with: tmux attach -t $session_name"
 }
 
 function dots {
-	/usr/bin/git --git-dir=$HOME/.dotfiles/.git --work-tree=$HOME "$@"
+  /usr/bin/git --git-dir=$HOME/.dotfiles/.git --work-tree=$HOME "$@"
 }
 
 function lazydots {
-	/usr/bin/lazygit --git-dir=$HOME/.dotfiles/.git --work-tree=$HOME "$@"
+  /usr/bin/lazygit --git-dir=$HOME/.dotfiles/.git --work-tree=$HOME "$@"
 }
 
 alias sensei='docker container run \
