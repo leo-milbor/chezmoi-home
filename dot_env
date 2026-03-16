@@ -6,6 +6,10 @@ export PATH=$PATH:"$HOME/.config/scripts"
 export PATH=$PATH:"$HOME/.local/bin"
 export PATH=$PATH:"$HOME/.config/bspwm"
 
+# Global AI Prompt Path and core commands
+export PATH=$PATH:"$HOME/sources/ai-stuff/cerebrum-machinae/bin/"
+export AI_BRAIN_PROMPT="$HOME/sources/ai-stuff/cerebrum-machinae/AGENTS.md"
+
 # secrets
 [ -s "$HOME/.secrets" ] && \. "$HOME/.secrets"
 
