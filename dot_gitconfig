@@ -10,7 +10,6 @@
   default = current
   autoSetupRemote = true
 [pull]
-	ff = only
 	rebase = true
 [fetch]
 	prune = true
