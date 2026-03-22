@@ -1,5 +1,7 @@
-
-# autocompletion
+# Init Homebrew, which adds environment variables.
+# This is so we have autocompletion scritp.
+eval "$(brew shellenv)"
+fpath=($HOMEBREW_PREFIX/share/zsh/site-functions $fpath)
 autoload -Uz compinit
 compinit
 zstyle ':completion:*' menu select
