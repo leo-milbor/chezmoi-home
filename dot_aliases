@@ -1,7 +1,7 @@
 alias cat='bat --plain --paging=never'
 alias bathelp='bat --plain --language=help'
 function help {
-  "$@" --help 2>&1 | bathelp
+    "$@" --help 2>&1 | bathelp
 }
 
 # Bind AI base prompt to CLI tool
@@ -45,136 +45,139 @@ alias jpp=fuck
 alias cm=chezmoi
 
 function yy() {
-  local tmp="$(mktemp -t "yazi-cwd.XXXXX")"
-  yazi "$@" --cwd-file="$tmp"
-  if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-    cd -- "$cwd"
-  fi
-  rm -f -- "$tmp"
+    local tmp="$(mktemp -t "yazi-cwd.XXXXX")"
+    yazi "$@" --cwd-file="$tmp"
+    if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+        cd -- "$cwd"
+    fi
+    rm -f -- "$tmp"
 }
 
 # Start a new configuration session in tmux or attach to it if it exists
 function tconf-session {
-  __ensure-installed "tmux"
+    __ensure-installed "tmux"
 
-  local detached=false
-  local session_name="config"
+    local detached=false
+    local session_name="config"
 
-  while [[ $# -gt 0 ]]; do
-    case "$1" in
-    -d | --detach)
-      detached=true
-      shift
-      ;;
-    *)
-      session_name="$1"
-      shift
-      ;;
-    esac
-  done
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -d | --detach)
+                detached=true
+                shift
+                ;;
+            *)
+                session_name="$1"
+                shift
+                ;;
+        esac
+    done
 
-  __tmux-try-switch $session_name
+    __tmux-try-switch $session_name
 
-  tmux new-session -d -s "$session_name" -n "neovim"
+    tmux new-session -d -s "$session_name" -n "neovim"
 
-  tmux send-keys -t "$session_name:neovim" "cd $HOME/.config/nvim && nvim ." C-m
+    tmux send-keys -t "$session_name:neovim" "cd $HOME/.config/nvim && nvim ." C-m
 
-  tmux new-window -t "$session_name" -n "crush"
-  tmux send-keys -t "$session_name:crush" "cd $HOME/.config/crush && nvim ." C-m
+    tmux new-window -t "$session_name" -n "cerebrum"
+    tmux send-keys -t "$session_name:cerebrum" "cd $HOME/sources/perso/cerebrum-machinae && nvim ." C-m
 
-  tmux new-window -t "$session_name" -n "cerebrum"
-  tmux send-keys -t "$session_name:cerebrum" "cd $HOME/sources/ai-stuff/cerebrum-machinae && nvim ." C-m
+    tmux new-window -t "$session_name" -n "opencode"
+    tmux send-keys -t "$session_name:opencode" "cd $HOME/.config/opencode && nvim ." C-m
 
-  if [ "$detached" = false ]; then
-    tmux select-window -t "$session_name:term"
-  fi
+    tmux new-window -t "$session_name" -n "crush"
+    tmux send-keys -t "$session_name:crush" "cd $HOME/.config/crush && nvim ." C-m
 
-  echo "Windows created: neovim, crush, cerebrum"
-  __tmux-switch $session_name $detached
+    if [ "$detached" = false ]; then
+        tmux select-window -t "$session_name:term"
+    fi
+
+    echo "Windows created: neovim, crush, cerebrum"
+    __tmux-switch $session_name $detached
 }
 
 # Start a new dev session in tmux or attach to it if it exists
 function tdev-session {
-  __ensure-installed "tmux"
+    __ensure-installed "tmux"
 
-  local detached=false
-  local session_name="dev"
+    local detached=false
+    local session_name="dev"
 
-  while [[ $# -gt 0 ]]; do
-    case "$1" in
-    -d | --detach)
-      detached=true
-      shift
-      ;;
-    *)
-      session_name="$1"
-      shift
-      ;;
-    esac
-  done
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -d | --detach)
+                detached=true
+                shift
+                ;;
+            *)
+                session_name="$1"
+                shift
+                ;;
+        esac
+    done
 
-  __tmux-try-switch "$session_name"
+    __tmux-try-switch "$session_name"
 
-  tmux new-session -d -s "$session_name" -n "term"
+    tmux new-session -d -s "$session_name" -n "term"
 
-  tmux new-window -t "$session_name" -n "neovim"
-  tmux send-keys -t "$session_name:neovim" "nvim ." C-m
+    tmux new-window -t "$session_name" -n "neovim"
+    tmux send-keys -t "$session_name:neovim" "nvim ." C-m
 
-  tmux new-window -t "$session_name" -n "ai"
-  tmux send-keys -t "$session_name:ai" "crush" C-m
+    tmux new-window -t "$session_name" -n "ai"
+    tmux send-keys -t "$session_name:ai" "opencode" C-m
 
-  if [ "$detached" = false ]; then
-    tmux select-window -t "$session_name:term"
-  fi
+    if [ "$detached" = false ]; then
+        tmux select-window -t "$session_name:term"
+    fi
 
-  echo "Windows created: term, neovim, ai"
-  __tmux-switch "$session_name" "$detached"
+    echo "Windows created: term, neovim, ai"
+    __tmux-switch "$session_name" "$detached"
 }
 
 function __tmux-try-switch {
-  session_name=$1
-  if tmux has-session -t "$session_name" 2>/dev/null; then
-    echo "Session '$session_name' already exists."
-    if [ -n "$TMUX" ]; then
-      echo "Switching to it..."
-      tmux switch-client -t "$session_name"
-    else
-      echo "Attaching..."
-      tmux attach-session -t "$session_name"
+    session_name=$1
+    if tmux has-session -t "$session_name" 2>/dev/null; then
+        echo "Session '$session_name' already exists."
+        if [ -n "$TMUX" ]; then
+            echo "Switching to it..."
+            tmux switch-client -t "$session_name"
+        else
+            echo "Attaching..."
+            tmux attach-session -t "$session_name"
+        fi
+        exit 0
     fi
-    exit 0
-  fi
 }
 
 function __tmux-switch {
-  session_name=$1
-  detached=$2
-  if [ "$detached" = true ]; then
-    echo "Running in detached mode."
-    echo "Attach with: tmux attach -t $session_name"
-  elif [ -n "$TMUX" ]; then
-    echo "Switching to new session..."
-    tmux switch-client -t "$session_name"
-  else
-    echo "Attaching to new session..."
-    tmux attach-session -t "$session_name"
-  fi
+    session_name=$1
+    detached=$2
+    if [ "$detached" = true ]; then
+        echo "Running in detached mode."
+        echo "Attach with: tmux attach -t $session_name"
+    elif [ -n "$TMUX" ]; then
+        echo "Switching to new session..."
+        tmux switch-client -t "$session_name"
+    else
+        echo "Attaching to new session..."
+        tmux attach-session -t "$session_name"
+    fi
 }
 
 function __ensure-installed {
-  tool=$1
-  if ! command -v "$tool" &>/dev/null; then
-    echo "Error: $tool is not installed."
-    exit 1
-  fi
+    tool=$1
+    if ! command -v "$tool" &>/dev/null; then
+        echo "Error: $tool is not installed."
+        exit 1
+    fi
 }
 
 function dots {
-  /usr/bin/git --git-dir=$HOME/.dotfiles/.git --work-tree=$HOME "$@"
+    /usr/bin/git --git-dir=$HOME/.dotfiles/.git --work-tree=$HOME "$@"
 }
 
 function lazydots {
-  /usr/bin/lazygit --git-dir=$HOME/.dotfiles/.git --work-tree=$HOME "$@"
+    /usr/bin/lazygit --git-dir=$HOME/.dotfiles/.git --work-tree=$HOME "$@"
 }
 
 alias sensei='docker container run \
