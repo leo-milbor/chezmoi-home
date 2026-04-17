@@ -3,6 +3,7 @@
 [user]
 	email = 20482270+leo-milbor@users.noreply.github.com
 	name = Léo Milbor
+	signingkey = 49744B6F84472FC1
 [alias]
 	lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
 	st = status
@@ -44,3 +45,7 @@
 [credential "https://gist.github.com"]
 	helper = 
 	helper = !/opt/homebrew/bin/gh auth git-credential
+[commit]
+	gpgsign = true
+[tag]
+	gpgSign = true
