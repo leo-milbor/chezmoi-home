@@ -1,3 +1,10 @@
+# OPENSPEC:START
+# OpenSpec shell completions configuration
+fpath=("/Users/leo/.zsh/completions" $fpath)
+autoload -Uz compinit
+compinit
+# OPENSPEC:END
+
 # Init Homebrew, which adds environment variables.
 # This is so we have autocompletion scritp.
 eval "$(brew shellenv)"
@@ -36,3 +43,5 @@ fpath+=${ZDOTDIR:-~}/.zsh_functions
 # Install dev tools
 eval "$(mise activate zsh)"
 
+# VI mode
+bindkey -v

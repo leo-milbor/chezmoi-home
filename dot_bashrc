@@ -7,7 +7,7 @@ source ~/.local/share/omarchy/default/bash/rc
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
-  . /etc/bashrc
+    . /etc/bashrc
 fi
 
 # Common shell conf
@@ -21,3 +21,6 @@ eval "$(zoxide init bash)"
 
 # Set up fzf key bindings and fuzzy completion
 eval "$(fzf --bash)"
+
+# VI mode
+set -0 vi
