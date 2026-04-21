@@ -58,7 +58,7 @@ function tconf-session {
     __ensure-installed "tmux"
 
     local detached=false
-    local session_name="config"
+    local session_name="CONFIG"
 
     while [[ $# -gt 0 ]]; do
         case "$1" in
@@ -101,7 +101,7 @@ function tdev-session {
     __ensure-installed "tmux"
 
     local detached=false
-    local session_name="dev"
+    local session_name="$(echo "${PWD##*/}" | tr '[:lower:]' '[:upper:]')"
 
     while [[ $# -gt 0 ]]; do
         case "$1" in
