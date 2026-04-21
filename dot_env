@@ -1,5 +1,7 @@
 export EDITOR='nvim'
 
+# So GNUPG can ask for password
+export GPG_TTY=$(tty)
 # PATH
 export PATH=$PATH:"$HOME/bin"
 export PATH=$PATH:"$HOME/.config/scripts"
@@ -7,8 +9,10 @@ export PATH=$PATH:"$HOME/.local/bin"
 export PATH=$PATH:"$HOME/.config/bspwm"
 
 # Global AI Prompt Path and core commands
-export PATH=$PATH:"$HOME/sources/ai-stuff/cerebrum-machinae/bin/"
-export AI_BRAIN_PROMPT="$HOME/sources/ai-stuff/cerebrum-machinae/AGENTS.md"
+export PATH=$PATH:"$HOME/sources/perso/cerebrum-machinae/bin/"
+export AI_BRAIN_PROMPT="$HOME/sources/perso/cerebrum-machinae/AGENTS.md"
+# Enable opentelemetry for opencode
+export OPENCODE_ENABLE_TELEMETRY=1
 
 # secrets
 [ -s "$HOME/.secrets" ] && \. "$HOME/.secrets"
