@@ -9,6 +9,7 @@ alias pi="pi @$AI_BRAIN_PROMPT"
 
 alias ls=eza
 alias ll="eza --icons --oneline"
+alias tree="eza --tree"
 
 alias v=nvim
 alias vi=nvim
@@ -75,24 +76,23 @@ function tconf-session {
 
     __tmux-try-switch $session_name
 
-    tmux new-session -d -s "$session_name" -n "neovim"
+    tmux new-session -d -s "$session_name" -n "NEOVIM"
 
-    tmux send-keys -t "$session_name:neovim" "cd $HOME/.config/nvim && nvim ." C-m
+    tmux send-keys -t "$session_name:NEOVIM" "cd $HOME/.config/nvim && nvim ." C-m
 
-    tmux new-window -t "$session_name" -n "cerebrum"
-    tmux send-keys -t "$session_name:cerebrum" "cd $HOME/sources/perso/cerebrum-machinae && nvim ." C-m
+    tmux new-window -t "$session_name" -n "CEREBRUM"
+    tmux send-keys -t "$session_name:cerebrUM" "CD $HOME/sources/perso/cerebrum-machinae && nvim ." C-m
 
-    tmux new-window -t "$session_name" -n "opencode"
-    tmux send-keys -t "$session_name:opencode" "cd $HOME/.config/opencode && nvim ." C-m
+    tmux new-window -t "$session_name" -n "OPENCODE"
+    tmux send-keys -t "$session_name:opencoDE" "CD $HOME/.config/opencode && nvim ." C-m
 
-    tmux new-window -t "$session_name" -n "crush"
-    tmux send-keys -t "$session_name:crush" "cd $HOME/.config/crush && nvim ." C-m
+    tmux new-window -t "$session_name" -n "CRUSH"
+    tmux send-keys -t "$session_name:cruSH" "CD $HOME/.config/crush && nvim ." C-m
 
     if [ "$detached" = false ]; then
-        tmux select-window -t "$session_name:term"
+        tmux select-window -t "$session_name:TERM"
     fi
 
-    echo "Windows created: neovim, crush, cerebrum"
     __tmux-switch $session_name $detached
 }
 
@@ -118,19 +118,18 @@ function tdev-session {
 
     __tmux-try-switch "$session_name"
 
-    tmux new-session -d -s "$session_name" -n "term"
+    tmux new-session -d -s "$session_name" -n "TERM"
 
-    tmux new-window -t "$session_name" -n "neovim"
-    tmux send-keys -t "$session_name:neovim" "nvim ." C-m
+    tmux new-window -t "$session_name" -n "NEOVIM"
+    tmux send-keys -t "$session_name:NEOVIM" "nvim ." C-m
 
-    tmux new-window -t "$session_name" -n "ai"
-    tmux send-keys -t "$session_name:ai" "opencode" C-m
+    tmux new-window -t "$session_name" -n "AI"
+    tmux send-keys -t "$session_name:AI" "opencode" C-m
 
     if [ "$detached" = false ]; then
-        tmux select-window -t "$session_name:term"
+        tmux select-window -t "$session_name:TERM"
     fi
 
-    echo "Windows created: term, neovim, ai"
     __tmux-switch "$session_name" "$detached"
 }
 
@@ -172,22 +171,3 @@ function __ensure-installed {
     fi
 }
 
-function dots {
-    /usr/bin/git --git-dir=$HOME/.dotfiles/.git --work-tree=$HOME "$@"
-}
-
-function lazydots {
-    /usr/bin/lazygit --git-dir=$HOME/.dotfiles/.git --work-tree=$HOME "$@"
-}
-
-alias sensei='docker container run \
-  --pull always \
-  --interactive \
-  --tty \
-  --rm \
-  --volume $(pwd):/$(basename $(pwd)) \
-  --workdir /$(basename $(pwd)) \
-  --publish ${SENSEI_PORT:-8080}:${SENSEI_PORT:-8080} \
-  --env SENSEI_PORT \
-  --cap-add=SYS_ADMIN \
-  zenika/sensei'
