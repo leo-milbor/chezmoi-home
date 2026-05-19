@@ -4,9 +4,6 @@ function help {
     "$@" --help 2>&1 | bathelp
 }
 
-# Bind AI base prompt to CLI tool
-alias pi="pi @$AI_BRAIN_PROMPT"
-
 alias ls=eza
 alias ll="eza --icons --oneline"
 alias tree="eza --tree"

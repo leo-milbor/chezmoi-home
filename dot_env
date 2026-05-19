@@ -9,10 +9,10 @@ export PATH=$PATH:"$HOME/.local/bin"
 export PATH=$PATH:"$HOME/.config/bspwm"
 
 # Global AI Prompt Path and core commands
-export PATH=$PATH:"$HOME/sources/perso/cerebrum-machinae/bin/"
-export AI_BRAIN_PROMPT="$HOME/sources/perso/cerebrum-machinae/AGENTS.md"
+export CEREBRUM_MACHINAE="$HOME/sources/perso/cerebrum-machinae/main"
 # Enable opentelemetry for opencode
 export OPENCODE_ENABLE_TELEMETRY=1
+export OLLAMA_HOST="http://127.0.0.1:11434"
 
 # secrets
 [ -s "$HOME/.secrets" ] && \. "$HOME/.secrets"
