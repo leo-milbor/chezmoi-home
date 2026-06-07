@@ -7,7 +7,7 @@ source ~/.local/share/omarchy/default/bash/rc
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
-    . /etc/bashrc
+  . /etc/bashrc
 fi
 
 # Common shell conf
@@ -23,4 +23,4 @@ eval "$(zoxide init bash)"
 eval "$(fzf --bash)"
 
 # VI mode
-set -0 vi
+set -o vi
