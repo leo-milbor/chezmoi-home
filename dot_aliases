@@ -188,7 +188,7 @@ function __ensure-installed {
     fi
 }
 
-function fd {
+function ff {
     local dir
     dir=$(fd --type d --strip-cwd-prefix 2>/dev/null | \
             fzf -e +m \
