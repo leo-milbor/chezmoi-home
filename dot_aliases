@@ -50,7 +50,6 @@ function yy() {
     fi
     rm -f -- "$tmp"
 }
-
 # Start a new configuration session in tmux or attach to it if it exists
 function tconf-session {
     __ensure-installed "tmux"
@@ -73,24 +72,36 @@ function tconf-session {
 
     __tmux-try-switch $session_name
 
-    tmux new-session -d -s "$session_name" -n "NEOVIM"
+    __tmux-create-widow "$session_name" "NEOVIM" "CD $HOME/.config/nvim && nvim ."
+    __tmux-create-widow "$session_name" "CEREBRUM" "CD $HOME/sources/perso/cerebrum-machinae && nvim ."
+    __tmux-create-widow "$session_name" "CRUSH" "CD $HOME/.config/crush && nvim ."
+    __tmux-create-widow "$session_name" "TMUX" "CD $HOME/.config/tmux/ && nvim ."
 
-    tmux send-keys -t "$session_name:NEOVIM" "cd $HOME/.config/nvim && nvim ." C-m
+    if [ "$detached" = false ]; then
+        tmux select-window -t "$session_name:NEOVIM"
+    fi
 
-    tmux new-window -t "$session_name" -n "CEREBRUM"
-    tmux send-keys -t "$session_name:cerebrUM" "CD $HOME/sources/perso/cerebrum-machinae && nvim ." C-m
+    __tmux-switch $session_name $detached
+}
 
-    tmux new-window -t "$session_name" -n "OPENCODE"
-    tmux send-keys -t "$session_name:opencoDE" "CD $HOME/.config/opencode && nvim ." C-m
+function totep-session {
+    __ensure-installed "tmux"
 
-    tmux new-window -t "$session_name" -n "CRUSH"
-    tmux send-keys -t "$session_name:cruSH" "CD $HOME/.config/crush && nvim ." C-m
+    local detached=false
+    local session_name="SERVICE"
+    __tmux-try-switch "$session_name"
+
+    cd "$HOME/sources/govtech/otep/service/" || exit 1
+
+    tmux new-session -d -s "$session_name" -n "TERM"
+    __tmux-create-widow "$session_name" "NEOVIM" "GOFLAGS=\"-tags=integration\" nvim ."
+    __tmux-create-widow "$session_name" "DOCKER" "lazydocker"
 
     if [ "$detached" = false ]; then
         tmux select-window -t "$session_name:TERM"
     fi
 
-    __tmux-switch $session_name $detached
+    __tmux-switch "$session_name" "$detached"
 }
 
 # Start a new dev session in tmux or attach to it if it exists
@@ -116,12 +127,8 @@ function tdev-session {
     __tmux-try-switch "$session_name"
 
     tmux new-session -d -s "$session_name" -n "TERM"
-
-    tmux new-window -t "$session_name" -n "NEOVIM"
-    tmux send-keys -t "$session_name:NEOVIM" "nvim ." C-m
-
-    tmux new-window -t "$session_name" -n "AI"
-    tmux send-keys -t "$session_name:AI" "opencode" C-m
+    __tmux-create-widow "$session_name" "NEOVIM" "nvim ."
+    __tmux-create-widow "$session_name" "AI" "crush"
 
     if [ "$detached" = false ]; then
         tmux select-window -t "$session_name:TERM"
@@ -129,6 +136,19 @@ function tdev-session {
 
     __tmux-switch "$session_name" "$detached"
 }
+
+__tmux-create-widow() {
+    session_name=$1
+    window_name=$2
+    command=$3
+
+    tmux new-window -t "$session_name" -n "$window_name"
+    while ! tmux list-windows -t "$session_name" | grep -q "$window_name"; do
+        sleep 0.05
+    done
+    tmux send-keys -t "$session_name:$window_name" "$command" C-m
+}
+
 
 function __tmux-try-switch {
     session_name=$1
@@ -168,3 +188,12 @@ function __ensure-installed {
     fi
 }
 
+function fd {
+    local dir
+    dir=$(fd --type d --strip-cwd-prefix 2>/dev/null | \
+            fzf -e +m \
+            --height 20% \
+            --layout=reverse \
+            --border \
+        --no-sort) && cd "$dir"
+}
