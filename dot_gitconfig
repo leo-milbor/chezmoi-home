@@ -18,6 +18,15 @@
 	colormovedws = allow-indentation-change
 	colorMoved = true
   tool = nvimdiff
+[color]
+  branch = auto
+  diff = auto
+  interactive = auto
+  status = auto
+[color "branch"]
+  current = green
+  local = yellow
+  remote = red
 [merge]
   tool = nvimdiff
 [core]
@@ -43,6 +52,9 @@
 	co = checkout
 	sw = switch
 	br = branch
+	fb = !git switch $(git branch --format '%(refname:short)' | fzf)
+	fba = !git switch $(git branch -a --format '%(refname:short)' | fzf)
+  dbz = !git branch --format '%(refname:short)' | grep -v main | gum choose --no-limit | xargs git branch -D
 	pulp = pull -p
 	fere = fetch && git rebase
 	please = push --force-with-lease
