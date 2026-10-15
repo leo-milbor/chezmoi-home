@@ -1,46 +1,8 @@
-[init]
-	defaultBranch = main
 [user]
 	email = 20482270+leo-milbor@users.noreply.github.com
 	name = Léo Milbor
 	signingkey = 49744B6F84472FC1
-[includeIf "gitdir:~/sources/govtech/"]
-    path = ~/sources/govtech/.gitconfig
-[push]
-  default = current
-  autoSetupRemote = true
-[pull]
-	rebase = true
-[fetch]
-	prune = true
-	pruneTags = true
-[diff]
-	colormovedws = allow-indentation-change
-	colorMoved = true
-  tool = nvimdiff
-[color]
-  branch = auto
-  diff = auto
-  interactive = auto
-  status = auto
-[color "branch"]
-  current = green
-  local = yellow
-  remote = red
-[merge]
-  tool = nvimdiff
-[core]
-	autocrlf = input
-[credential "https://github.com"]
-	helper = 
-	helper = !/opt/homebrew/bin/gh auth git-credential
-[credential "https://gist.github.com"]
-	helper = 
-	helper = !/opt/homebrew/bin/gh auth git-credential
-[commit]
-	gpgsign = true
-[tag]
-	gpgSign = true
+
 [alias]
 	lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
 	st = status
@@ -52,10 +14,70 @@
 	co = checkout
 	sw = switch
 	br = branch
-	fb = !git switch $(git branch --format '%(refname:short)' | fzf)
-	fba = !git switch $(git branch -a --format '%(refname:short)' | fzf)
+	fb = !git switch $(git branch --format '%(refname:short)' | gum choose)
+	fba = !git branch -a --format '%(refname:short)' | fzf | sed 's/origin//' | cut -c 2- | xargs git switch
   dbz = !git branch --format '%(refname:short)' | grep -v main | gum choose --no-limit | xargs git branch -D
 	pulp = pull -p
 	fere = fetch && git rebase
 	please = push --force-with-lease
 	diff = diff | xargs bat --diff
+
+[color "branch"]
+  current = green
+  local = yellow
+  remote = red
+
+[color]
+  branch = auto
+  diff = auto
+  interactive = auto
+  status = auto
+
+[commit]
+	gpgsign = true
+
+[core]
+	autocrlf = input
+  pager = delta
+
+[credential "https://github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
+
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
+
+[delta]
+  navigate = true
+
+[diff]
+	colorMoved = true
+	colormovedws = allow-indentation-change
+  tool = nvimdiff
+
+[fetch]
+	prune = true
+	pruneTags = true
+
+[includeIf "gitdir:~/sources/govtech/"]
+    path = ~/sources/govtech/.gitconfig
+
+[init]
+	defaultBranch = main
+
+[interactive]
+  diffFilter = delta --color-only
+
+[merge]
+  tool = nvimdiff
+
+[pull]
+	rebase = true
+
+[push]
+  autoSetupRemote = true
+  default = current
+
+[tag]
+	gpgSign = true
