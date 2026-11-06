@@ -1,13 +1,23 @@
 #!/usr/bin/env bash
 
+function __log {
+    local level="$1"
+    local message="$2"
+    if __has_command gum; then
+        gum log -l "$level" "$message"
+    else
+        printf '%s %s\n' "$(printf '%s' "$level" | tr '[:lower:]' '[:upper:]')" "$message" >&2
+    fi
+}
+
 function __log_info {
-    gum log -l info "$1"
+    __log info "$1"
 }
 
 function __log_warn {
-    gum log -l warn "$1"
+    __log warn "$1"
 }
 
 function __log_error {
-    gum log -l error "$1"
+    __log error "$1"
 }
