@@ -1,0 +1,7 @@
+{{- $work := promptBoolOnce . "work" "Is this a work machine" -}}
+
+[data]
+    work = {{ $work }}
+
+[add]
+    secrets = "error"

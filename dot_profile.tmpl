@@ -11,4 +11,6 @@ if [ -d "$HOME/.config/shell/lib" ]; then
     unset lib
 fi
 source_if_exists "$HOME/.aliases"
+{{- if .work }}
 source_if_exists "$HOME/sources/govtech/otep/.profile"
+{{- end }}
