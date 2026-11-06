@@ -15,30 +15,25 @@ alias fv="fzf --multi --bind 'enter:become(nvim {+})'"
 
 alias valiases="nvim $HOME/.aliases --cmd 'cd $HOME/'"
 alias vbash="nvim $HOME/.bashrc --cmd 'cd $HOME/'"
-alias vbspwm="nvim $HOME/.config/bspwm 'cd $HOME/.config/bspwm/'"
 alias venv="nvim $HOME/.env --cmd 'cd $HOME/'"
 alias vgit="nvim $HOME/.gitconfig --cmd 'cd $HOME/'"
-alias vhypr="nvim $HOME/.config/hypr --cmd 'cd $HOME/.config/hypr/'"
 alias vneovim="nvim $HOME/.config/nvim --cmd 'cd $HOME/.config/nvim/'"
-alias vnotes="nvim $HOME/Documents/obsidian-notes --cmd 'cd $HOME/Documents/obsidian-notes'"
-alias vnix="nvim $HOME/.config/nixos-config/ --cmd 'cd $HOME/.config/nixos-config/'"
 alias vprofile="nvim $HOME/.profile --cmd 'cd $HOME/'"
 alias vreadme="nvim $HOME/README.md --cmd 'cd $HOME/'"
-alias vscripts="nvim $HOME/.config/scripts --cmd 'cd $HOME/.config/scripts/'"
 alias vsecrets="nvim $HOME/.secrets --cmd 'cd $HOME'"
+alias vshelllib="nvim $HOME/.config/shell/lib --cmd 'cd $HOME/.config/shell/lib/'"
 alias vzsh="nvim $HOME/.zshrc --cmd 'cd $HOME/'"
 alias vpijul="nvim $HOME/.config/pijul/config.toml"
 
 alias saliases="source $HOME/.aliases"
-alias sbashrc="source $HOME/bashrc"
+alias sbashrc="source $HOME/.bashrc"
 alias senv="source $HOME/.env"
 alias sprofile="source $HOME/.profile"
 alias ssecrets="source $HOME/.secrets"
+alias sshelllib='for lib in "$HOME"/.config/shell/lib/*.sh; do source "$lib"; done; unset lib'
 alias szshrc="source $HOME/.zshrc"
 
 alias pj=pijul
-
-alias jpp=fuck
 
 alias cm=chezmoi
 
@@ -55,22 +50,35 @@ function yy() {
 function conf_session {
     __ensure_installed "tmux" || return 1
 
-    local detached="$1:-false"
+    local detached=false
     local session_name="CONFIG"
 
-    __tmux_try_switch $session_name && return 0
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -d | --detach)
+                detached=true
+                shift
+                ;;
+            *)
+                session_name="$1"
+                shift
+                ;;
+        esac
+    done
 
-    __tmux_create_window "$session_name" "HOME" "CD $HOME"
-    __tmux_create_window "$session_name" "NEOVIM" "CD $HOME/.config/nvim && nvim ."
-    __tmux_create_window "$session_name" "CEREBRUM" "CD $HOME/sources/perso/cerebrum-machinae && nvim ."
-    __tmux_create_window "$session_name" "CRUSH" "CD $HOME/.config/crush && nvim ."
-    __tmux_create_window "$session_name" "TMUX" "CD $HOME/.config/tmux/ && nvim ."
+    __tmux_try_switch "$session_name" && return 0
+
+    tmux new-session -d -s "$session_name" -n "HOME" -c "$HOME"
+    __tmux_create_window "$session_name" "NEOVIM" "cd $HOME/.config/nvim && nvim ."
+    __tmux_create_window "$session_name" "CEREBRUM" "cd $HOME/sources/perso/cerebrum-machinae && nvim ."
+    __tmux_create_window "$session_name" "CRUSH" "cd $HOME/.config/crush && nvim ."
+    __tmux_create_window "$session_name" "TMUX" "cd $HOME/.config/tmux/ && nvim ."
 
     if [ "$detached" = false ]; then
         tmux select-window -t "$session_name:NEOVIM"
     fi
 
-    __tmux_switch $session_name $detached
+    __tmux_switch "$session_name" "$detached"
 }
 
 # Start a new dev session in tmux or attach to it if it exists
