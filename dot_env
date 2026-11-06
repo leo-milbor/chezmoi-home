@@ -1,12 +1,19 @@
 export EDITOR='nvim'
 
-# So GNUPG can ask for password
-export GPG_TTY=$(tty)
 # PATH
-export PATH=$PATH:"$HOME/bin"
-export PATH=$PATH:"$HOME/.config/scripts"
-export PATH=$PATH:"$HOME/.local/bin"
-export PATH=$PATH:"$HOME/.config/bspwm"
+extra_path_dirs=(
+    "$HOME/bin"
+    "$HOME/.local/bin"
+)
+for dir in "${extra_path_dirs[@]}"; do
+    [ -d "$dir" ] || continue
+    case ":$PATH:" in
+        *":$dir:"*) ;;
+        *) PATH="$PATH:$dir" ;;
+    esac
+done
+export PATH
+unset extra_path_dirs dir
 
 # Global AI Prompt Path and core commands
 export CEREBRUM_MACHINAE="$HOME/sources/perso/cerebrum-machinae/main"
@@ -16,9 +23,6 @@ export OLLAMA_HOST="http://127.0.0.1:11434"
 
 # secrets
 [ -s "$HOME/.secrets" ] && \. "$HOME/.secrets"
-
-# added by Toolbox App
-export PATH="$PATH:$HOME/.local/share/JetBrains/Toolbox/scripts"
 
 # fzf
 ## use ripgrep instead of find
