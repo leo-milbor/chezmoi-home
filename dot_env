@@ -25,8 +25,3 @@ export PATH="$PATH:$HOME/.local/share/JetBrains/Toolbox/scripts"
 export FZF_DEFAULT_COMMAND='rg --files --hidden'
 ## add preview for files
 export FZF_DEFAULT_OPTS="--height 50% -1 --layout=reverse-list --multi --preview='[[ \$(file --mime {}) =~ binary ]] && echo {} is a binary file || (bat --style=numbers --color=always {} || cat {}) 2> /dev/null | head -300'"
-## catppuccin-macchiato color scheme
-# export FZF_DEFAULT_OPTS=" \
-# --color=bg+:#363a4f,bg:#24273a,spinner:#f4dbd6,hl:#ed8796 \
-# --color=fg:#cad3f5,header:#ed8796,info:#c6a0f6,pointer:#f4dbd6 \
-# --color=marker:#f4dbd6,fg+:#cad3f5,prompt:#c6a0f6,hl+:#ed8796"
