@@ -1,29 +1,19 @@
-# OPENSPEC:START
-# OpenSpec shell completions configuration
-fpath=("/Users/leo/.zsh/completions" $fpath)
-autoload -Uz compinit
-compinit
-# OPENSPEC:END
+typeset -U path fpath
 
 # Init Homebrew, which adds environment variables.
 # This is so we have autocompletion scritp.
-eval "$(brew shellenv)"
-fpath=($HOMEBREW_PREFIX/share/zsh/site-functions $fpath)
+if command -v brew >/dev/null 2>&1; then
+    eval "$(brew shellenv)"
+    fpath=($HOMEBREW_PREFIX/share/zsh/site-functions $fpath)
+fi
+
 autoload -Uz compinit
 compinit
 zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z-_}={A-Za-z_-}'
 
-# Use hyphen-insensitive completion.
-# Case-sensitive completion must be off. _ and - will be interchangeable.
-HYPHEN_INSENSITIVE="true"
-
-# Enable command auto-correction.
-ENABLE_CORRECTION="false"
-
-# Display red dots whilst waiting for completion.
-COMPLETION_WAITING_DOTS="true"
-
-HIST_STAMPS="dd.mm.yyyy"
+# So GNUPG can ask for password
+export GPG_TTY=$(tty)
 
 source $HOME/.zshrc_keybinding
 
@@ -38,9 +28,9 @@ eval "$(fzf --zsh)"
 
 # z to move around
 eval "$(zoxide init zsh)"
-fpath+=${ZDOTDIR:-~}/.zsh_functions
 
 # Install dev tools
+path=($path)
 eval "$(mise activate zsh)"
 
 # VI mode

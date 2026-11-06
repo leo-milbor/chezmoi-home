@@ -1,14 +1,13 @@
 # If not running interactively, don't do anything (leave this at the top of this file)
 [[ $- != *i* ]] && return
 
-# .bashrc
-# Do not modify those. Just override hte config here.
-source ~/.local/share/omarchy/default/bash/rc
-
 # Source global definitions
 if [ -f /etc/bashrc ]; then
   . /etc/bashrc
 fi
+
+# So GNUPG can ask for password
+export GPG_TTY=$(tty)
 
 # Common shell conf
 . $HOME/.profile
