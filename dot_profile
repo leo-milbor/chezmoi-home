@@ -4,4 +4,11 @@ function source_if_exists {
 }
 
 source_if_exists "$HOME/.env"
+if [ -d "$HOME/.config/shell/lib" ]; then
+    for lib in "$HOME"/.config/shell/lib/*.sh; do
+        source_if_exists "$lib"
+    done
+    unset lib
+fi
 source_if_exists "$HOME/.aliases"
+source_if_exists "$HOME/sources/govtech/otep/.profile"
