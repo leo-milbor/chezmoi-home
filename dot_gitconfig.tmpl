@@ -1,7 +1,11 @@
 [user]
 	email = 20482270+leo-milbor@users.noreply.github.com
 	name = Léo Milbor
+{{- if .work }}
 	signingkey = 49744B6F84472FC1
+{{- else }}
+	signingkey = CCE94907D3580D3E
+{{- end }}
 
 [alias]
 	lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
