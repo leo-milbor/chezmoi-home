@@ -13,4 +13,7 @@ fi
 source_if_exists "$HOME/.aliases"
 {{- if .work }}
 source_if_exists "$HOME/sources/govtech/otep/.profile"
+{{- else }}
+
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 {{- end }}
