@@ -1,5 +1,6 @@
 add_newline = true
 command_timeout = 200
+palette = "zen"
 format = """
 $directory\
 $git_branch\
@@ -8,31 +9,41 @@ $aws\
 $line_break\
 $character"""
 
+[palettes.zen]
+accent = "6"
+accent-hi = "14"
+muted = "15"
+info = "4"
+success = "2"
+warning = "3"
+danger = "1"
+
 [character]
-error_symbol = "[✗](bold cyan)"
-success_symbol = "[❯](bold cyan)"
+error_symbol = "[✗](bold danger)"
+success_symbol = "[❯](bold)"
 
 [directory]
 truncation_length = 2
 truncation_symbol = "…/"
 truncate_to_repo = false
-repo_root_style = "bold cyan"
+style = "dimmed"
+repo_root_style = "bold"
 repo_root_format = "[$before_root_path]($style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "
 
 [git_branch]
 format = "[$branch]($style) "
-style = "italic cyan"
+style = "italic muted"
 
 [git_status]
-format = '[$all_status]($style)'
-style = "cyan"
-ahead = "⇡${count} "
-diverged = "⇕⇡${ahead_count}⇣${behind_count} "
-behind = "⇣${count} "
-conflicted = " "
-up_to_date = " "
-untracked = "? "
-modified = " "
+format = '(\([$all_status]($style)\) )'
+style = "muted"
+ahead = "[⇡${count}](warning)"
+diverged = "[⇕⇡${ahead_count}⇣${behind_count}](warning)"
+behind = "[⇣${count}](warning)"
+conflicted = "[!](bold danger)"
+up_to_date = ""
+untracked = "[?](accent)"
+modified = "[●](accent)"
 stashed = ""
 staged = ""
 renamed = ""
@@ -42,10 +53,10 @@ deleted = ""
 # AWS
 # ─────────────────────────────────────────────────────────────
 [aws]
-format = '[$symbol($profile )(\($region\) )(\[$duration\])]($style)'
+format = '( [{$symbol($profile )(\($region\) )(\[$duration\])}]($style) )'
 symbol = "☁️ "
-style = "bold yellow"
-expiration_symbol = "⚠️"
+style = "bold accent"
+expiration_symbol = "[⚠️](bold danger)"
 
 [aws.region_aliases]
 us-east-1 = "use1"
