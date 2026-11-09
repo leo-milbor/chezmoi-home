@@ -46,11 +46,19 @@
 
 [credential "https://github.com"]
 	helper = 
+{{- if .work }}
 	helper = !/opt/homebrew/bin/gh auth git-credential
+{{- else }}
+	helper = !/home/linuxbrew/.linuxbrew/bin/gh auth git-credential
+{{- end }}
 
 [credential "https://gist.github.com"]
 	helper = 
+{{- if .work }}
 	helper = !/opt/homebrew/bin/gh auth git-credential
+{{- else }}
+	helper = !/home/linuxbrew/.linuxbrew/bin/gh auth git-credential
+{{- end }}
 
 [delta]
   navigate = true
@@ -64,8 +72,10 @@
 	prune = true
 	pruneTags = true
 
+{{- if .work}}
 [includeIf "gitdir:~/sources/govtech/"]
     path = ~/sources/govtech/.gitconfig
+{{- end }}
 
 [init]
 	defaultBranch = main
